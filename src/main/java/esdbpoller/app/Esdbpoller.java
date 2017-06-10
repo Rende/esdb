@@ -27,7 +27,11 @@ public class Esdbpoller {
 					+ result.getTotalShards() + " succesful shards: "
 					+ result.getSuccessfulShard() + " failed shards: "
 					+ result.getFailedShard());
-			System.out.println(result.getTotalHits());
+			System.out.println("Total hits: " + result.getTotalHits()
+					+ " took: " + result.getTook() + " total shards: "
+					+ result.getTotalShards() + " succesful shards: "
+					+ result.getSuccessfulShard() + " failed shards: "
+					+ result.getFailedShard());
 			try {
 				Thread.sleep(10 * // seconds to a minute
 				1000);
