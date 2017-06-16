@@ -1,4 +1,5 @@
 package esdbpoller.app;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -37,8 +38,8 @@ public class ElasticsearchService {
 					.addTransportAddress(
 							new InetSocketTransportAddress(InetAddress
 									.getByName(Config.getInstance().getString(
-											Config.HOST)), Config
-									.getInstance().getInt(Config.PORT)));
+											Config.HOST)), Config.getInstance()
+									.getInt(Config.PORT)));
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
@@ -51,15 +52,25 @@ public class ElasticsearchService {
 		}
 		return client;
 	}
+
 	public SearchResult pollDB() {
-		SearchResponse response = getInstance().prepareSearch(allField)
-				.setSize(0).execute().actionGet();
+
 		SearchResult result = new SearchResult();
-		result.setTotalHits(response.getHits().totalHits());
-		result.setTookInMillis(result.getTookInMillis());
-		result.setSuccessfulShard(result.getSuccessfulShard());
-		result.setFailedShard(result.getFailedShard());
+		try {
+			SearchResponse response = getInstance().prepareSearch(allField)
+					.setSize(0).execute().actionGet();
+
+			result.setTotalHits(response.getHits().totalHits());
+			result.setTookInMillis(result.getTookInMillis());
+			result.setSuccessfulShard(result.getSuccessfulShard());
+			result.setFailedShard(result.getFailedShard());
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			Esdbpoller.logger.error("pollDB method: " + e.getMessage());
+		}
 
 		return result;
 	}
+
 }
